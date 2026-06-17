@@ -9,6 +9,7 @@ import AcidentesPage from './pages/seguranca/Acidentes/AcidentesPage'
 import EpiPage from './pages/epi/EpiPage'
 import TreinamentosPage from './pages/treinamentos/TreinamentosPage'
 import AbsenteismoPage from './pages/saude/Absenteismo/AbsenteismoPage'
+import PcmsoPage from './pages/saude/Pcmso/PcmsoPage'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -23,7 +24,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard',               element: <Dashboard /> },
       { path: 'saude/aso',               element: <AsoPage /> },
-      { path: 'saude/pcmso',             element: <ComingSoon modulo="PCMSO" /> },
+      { path: 'saude/pcmso',             element: <PcmsoPage /> },
       { path: 'saude/absenteismo',        element: <AbsenteismoPage /> },
       { path: 'seguranca/acidentes',     element: <AcidentesPage /> },
       { path: 'seguranca/inspecoes',     element: <ComingSoon modulo="Inspeções" /> },
