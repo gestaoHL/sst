@@ -7,6 +7,7 @@ import AsoPage from './pages/saude/Aso/AsoPage'
 import ComingSoon from './pages/stubs/ComingSoon'
 import AcidentesPage from './pages/seguranca/Acidentes/AcidentesPage'
 import EpiPage from './pages/epi/EpiPage'
+import TreinamentosPage from './pages/treinamentos/TreinamentosPage'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -27,7 +28,7 @@ export const router = createBrowserRouter([
       { path: 'seguranca/inspecoes',     element: <ComingSoon modulo="Inspeções" /> },
       { path: 'seguranca/permissoes',    element: <ComingSoon modulo="Permissões de Trabalho" /> },
       { path: 'epi',                     element: <EpiPage /> },
-      { path: 'treinamentos',            element: <ComingSoon modulo="Treinamentos" /> },
+      { path: 'treinamentos',            element: <TreinamentosPage /> },
       { path: 'cipa',                    element: <ComingSoon modulo="CIPA" /> },
       { path: 'laudos',                  element: <ComingSoon modulo="Laudos / PGR" /> },
       { path: 'funcionarios',            element: <ComingSoon modulo="Funcionários" /> },
