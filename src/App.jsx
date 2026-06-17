@@ -1,3 +1,11 @@
+import { RouterProvider } from 'react-router-dom'
+import { router } from './router'
+import { AuthProvider } from './contexts/AuthContext'
+
 export default function App() {
-  return <div className="bg-metro-navy text-white p-8 font-sans">Tailwind Metro-DF OK</div>
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }
