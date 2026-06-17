@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SST Metro-DF — Módulo ASO</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #506F9B; --primary-dark: #3A5275; --navy: #183C72;
+    --accent: #FEB538; --accent-orange: #FF8C00;
+    --text: #3F3F3F; --text-light: #767676; --bg-light: #FAFAFA; --white: #FFFFFF;
+    --red: #DC2626; --green: #16A34A; --amber: #D97706; --blue: #2563EB;
+    --border: #e5e9f0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg-light); color: var(--text); font-size: 13px; }
+  .accent-bar { height: 3px; background: linear-gradient(90deg, var(--navy) 0%, var(--primary) 60%, var(--accent) 100%); }
+
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--border);
+    padding: 0 24px; height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar-title { font-size: 15px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+  .topbar-title .breadcrumb { font-weight: 400; color: var(--text-light); font-size: 13px; }
+  .topbar-title .sep { color: #ccc; margin: 0 4px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.15s;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+  .topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+  .content { padding: 20px 24px; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 18px; display: flex; gap: 12px; align-items: center;
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .filter-input {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--bg-light); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 10px; flex: 1; min-width: 200px;
+  }
+  .filter-input i { color: var(--text-light); font-size: 12px; }
+  .filter-input input {
+    border: none; background: none; font-family: 'Inter', sans-serif;
+    font-size: 12px; color: var(--text); outline: none; width: 100%;
+  }
+  .filter-select {
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; font-family: 'Inter', sans-serif; font-size: 12px;
+    color: var(--text); background: var(--bg-light); cursor: pointer; outline: none;
+  }
+  .filter-chips { display: flex; gap: 6px; }
+  .chip {
+    padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--border); background: #fff; color: var(--text-light);
+  }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chip.red { background: #fef2f2; color: var(--red); border-color: #fca5a5; }
+  .chip.amber { background: #fff7ed; color: var(--amber); border-color: #fcd34d; }
+
+  /* TABLE */
+  .table-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .table-header {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .table-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .table-count { font-size: 11px; color: var(--text-light); margin-left: 8px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: #f8fafd; }
+  th {
+    text-align: left; padding: 10px 14px;
+    font-size: 11px; font-weight: 600; color: var(--text-light);
+    text-transform: uppercase; letter-spacing: 0.4px;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 11px 14px; border-bottom: 1px solid #f5f7fb; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafbff; }
+  .cell-name { font-weight: 600; color: var(--text); }
+  .cell-sub { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+
+  .badge {
+    display: inline-block; padding: 3px 9px; border-radius: 20px;
+    font-size: 10px; font-weight: 700; white-space: nowrap;
+  }
+  .badge.vencido { background: #fef2f2; color: var(--red); }
+  .badge.vence_30 { background: #fff7ed; color: var(--accent-orange); }
+  .badge.vence_60 { background: #fefce8; color: #ca8a04; }
+  .badge.vence_90 { background: #eff6ff; color: var(--blue); }
+  .badge.ok { background: #f0fdf4; color: var(--green); }
+  .badge.sem_aso { background: #f5f5f5; color: #666; }
+
+  .tipo-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 10px; font-weight: 600; background: #eef2f9; color: var(--primary);
+  }
+  .tipo-badge.admissional { background: #f0fdf4; color: var(--green); }
+  .tipo-badge.demissional { background: #fef2f2; color: var(--red); }
+
+  .action-btn {
+    padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer;
+    font-size: 11px; background: none; color: var(--text-light); transition: all 0.1s;
+  }
+  .action-btn:hover { background: var(--bg-light); color: var(--primary); }
+
+  .pagination {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px; border-top: 1px solid var(--border);
+  }
+  .page-info { font-size: 12px; color: var(--text-light); }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn {
+    padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border);
+    background: #fff; font-size: 12px; cursor: pointer; color: var(--text);
+  }
+  .page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  /* FORM PANEL (lateral slide) */
+  .split-layout { display: grid; grid-template-columns: 1fr 380px; gap: 18px; }
+  .form-panel {
+    background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .form-header {
+    background: var(--navy); padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .form-header-title { color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .form-header-title i { color: var(--accent); }
+  .form-close { background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 14px; }
+  .form-body { padding: 18px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; }
+  .form-control {
+    width: 100%; padding: 8px 10px; border: 1.5px solid var(--border);
+    border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px;
+    color: var(--text); background: #fff; outline: none; transition: border 0.15s;
+  }
+  .form-control:focus { border-color: var(--primary); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-footer { padding: 14px 18px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+  .resultado-btns { display: flex; gap: 8px; }
+  .resultado-btn {
+    flex: 1; padding: 8px; border-radius: 6px; border: 2px solid var(--border);
+    background: #fff; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+    cursor: pointer; text-align: center; transition: all 0.15s; color: var(--text-light);
+  }
+  .resultado-btn.selected-apto { border-color: var(--green); background: #f0fdf4; color: var(--green); }
+  .resultado-btn.selected-restricao { border-color: var(--amber); background: #fff7ed; color: var(--amber); }
+  .resultado-btn.selected-inapto { border-color: var(--red); background: #fef2f2; color: var(--red); }
+</style>
+</head>
+<body>
+
+<div class="accent-bar"></div>
+<div class="topbar">
+  <div class="topbar-title">
+    <i class="fa-solid fa-file-medical" style="color:#506F9B"></i>
+    <span class="breadcrumb">Saúde Ocupacional</span>
+    <span class="sep">/</span>
+    ASO · Exames Médicos
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-outline btn-sm"><i class="fa-solid fa-file-export"></i> Exportar</button>
+    <button class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Novo ASO</button>
+  </div>
+</div>
+
+<div class="content">
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-input">
+      <i class="fa-solid fa-search"></i>
+      <input type="text" placeholder="Buscar por nome, matrícula ou setor...">
+    </div>
+    <select class="filter-select">
+      <option>Todos os setores</option>
+      <option>Operação</option>
+      <option>Manutenção</option>
+      <option>Administração</option>
+    </select>
+    <select class="filter-select">
+      <option>Todos os tipos</option>
+      <option>Periódico</option>
+      <option>Admissional</option>
+      <option>Demissional</option>
+    </select>
+    <div class="filter-chips">
+      <span class="chip active">Todos</span>
+      <span class="chip red">Vencidos (3)</span>
+      <span class="chip amber">30 dias (12)</span>
+    </div>
+  </div>
+
+  <div class="split-layout">
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>
+          <span class="table-title">Exames Médicos Ocupacionais</span>
+          <span class="table-count">— 248 funcionários</span>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Funcionário</th>
+            <th>Tipo</th>
+            <th>Realizado</th>
+            <th>Próximo Exame</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="cell-name">Maria Rocha</div>
+              <div class="cell-sub">Mat. 10234 · Operadora de Trem · CCOV</div>
+            </td>
+            <td><span class="tipo-badge">Periódico</span></td>
+            <td>12/06/2024</td>
+            <td style="color:var(--red);font-weight:600">12/06/2025</td>
+            <td><span class="badge vencido">Vencido</span></td>
+            <td>
+              <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+              <button class="action-btn"><i class="fa-solid fa-pen"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cell-name">Carlos Santos</div>
+              <div class="cell-sub">Mat. 10089 · Eletricista · Manutenção</div>
+            </td>
+            <td><span class="tipo-badge">Periódico</span></td>
+            <td>01/06/2024</td>
+            <td style="color:var(--red);font-weight:600">01/06/2025</td>
+            <td><span class="badge vencido">Vencido</span></td>
+            <td>
+              <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+              <button class="action-btn"><i class="fa-solid fa-pen"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cell-name">Ana Paula Lima</div>
+              <div class="cell-sub">Mat. 10456 · Técnica de Manutenção · OF</div>
+            </td>
+            <td><span class="tipo-badge">Periódico</span></td>
+            <td>25/06/2024</td>
+            <td style="color:var(--accent-orange);font-weight:600">25/06/2025</td>
+            <td><span class="badge vence_30">Vence em 8d</span></td>
+            <td>
+              <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+              <button class="action-btn"><i class="fa-solid fa-pen"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cell-name">Rodrigo Ferreira</div>
+              <div class="cell-sub">Mat. 10312 · Agente de Estação · Ag. Central</div>
+            </td>
+            <td><span class="tipo-badge">Periódico</span></td>
+            <td>01/07/2024</td>
+            <td style="color:var(--amber);font-weight:600">01/07/2025</td>
+            <td><span class="badge vence_30">Vence em 15d</span></td>
+            <td>
+              <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+              <button class="action-btn"><i class="fa-solid fa-pen"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cell-name">Fernanda Costa</div>
+              <div class="cell-sub">Mat. 10567 · Operadora de Trem · CCOV</div>
+            </td>
+            <td><span class="tipo-badge admissional">Admissional</span></td>
+            <td>10/06/2025</td>
+            <td>10/06/2026</td>
+            <td><span class="badge ok">Regular</span></td>
+            <td>
+              <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+              <button class="action-btn"><i class="fa-solid fa-pen"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cell-name">Jorge Almeida</div>
+              <div class="cell-sub">Mat. 10021 · Supervisor · Administração</div>
+            </td>
+            <td><span class="tipo-badge">Periódico</span></td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="badge sem_aso">Sem ASO</span></td>
+            <td>
+              <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
+              <button class="action-btn"><i class="fa-solid fa-pen"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination">
+        <span class="page-info">Mostrando 1–20 de 248 registros</span>
+        <div class="page-btns">
+          <button class="page-btn">‹</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM PANEL -->
+    <div class="form-panel">
+      <div class="form-header">
+        <div class="form-header-title">
+          <i class="fa-solid fa-plus"></i> Registrar ASO
+        </div>
+        <button class="form-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="form-body">
+        <div class="form-group">
+          <label class="form-label">Funcionário</label>
+          <select class="form-control">
+            <option>— selecione —</option>
+            <option>10234 · Maria Rocha</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tipo de ASO</label>
+            <select class="form-control">
+              <option>Periódico</option>
+              <option>Admissional</option>
+              <option>Demissional</option>
+              <option>Retorno ao trabalho</option>
+              <option>Mudança de função</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data de Realização</label>
+            <input type="date" class="form-control" value="2026-06-17">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Médico Responsável</label>
+          <input type="text" class="form-control" placeholder="Dr. Nome CRM/DF 00000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Resultado</label>
+          <div class="resultado-btns">
+            <button class="resultado-btn selected-apto">✓ Apto</button>
+            <button class="resultado-btn">⚠ Apto c/ Restrição</button>
+            <button class="resultado-btn">✗ Inapto</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Restrições / Observações</label>
+          <textarea class="form-control" rows="3" placeholder="Descreva restrições ou observações médicas..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Exames Complementares</label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span style="padding:3px 8px;border-radius:4px;background:#eef2f9;color:var(--primary);font-size:11px;font-weight:600">Audiometria</span>
+            <span style="padding:3px 8px;border-radius:4px;background:#eef2f9;color:var(--primary);font-size:11px;font-weight:600">Hemograma</span>
+            <span style="padding:3px 8px;border-radius:4px;background:#eef2f9;color:var(--primary);font-size:11px;font-weight:600">Eletrocardiograma</span>
+            <span style="padding:3px 8px;border-radius:4px;background:#f5f5f5;color:#999;font-size:11px;cursor:pointer">+ Adicionar</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn btn-outline btn-sm">Cancelar</button>
+        <button class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Salvar ASO</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

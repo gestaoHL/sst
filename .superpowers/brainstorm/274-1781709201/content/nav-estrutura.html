@@ -1,0 +1,88 @@
+<h2>Como deve ser organizada a navegação da plataforma?</h2>
+<p class="subtitle">Para um SST de metrô com múltiplos módulos, a estrutura de navegação define a experiência do usuário diário.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Sidebar Lateral Fixa + Dashboard Inicial</h3>
+      <p>Painel de KPIs na abertura (acidentes, ASOs vencendo, EPIs vencidos). Sidebar com todos os módulos sempre visível. Padrão das grandes plataformas corporativas (SAP, TOTVS SST, eSocial).</p>
+      <div class="mockup" style="margin-top:10px">
+        <div class="mockup-header">Prévia</div>
+        <div class="mockup-body" style="display:flex;gap:0;padding:0;min-height:120px">
+          <div style="width:140px;background:#1a2535;padding:10px;font-size:11px;color:#aaa;flex-shrink:0">
+            <div style="color:#4ade80;font-weight:600;margin-bottom:8px;font-size:12px">SST Metro-DF</div>
+            <div style="padding:4px 6px;background:#2d3f55;color:#fff;border-radius:4px;margin-bottom:3px">📊 Dashboard</div>
+            <div style="padding:4px 6px;margin-bottom:3px">🏥 Saúde Ocup.</div>
+            <div style="padding:4px 6px;margin-bottom:3px">⛑️ Segurança</div>
+            <div style="padding:4px 6px;margin-bottom:3px">🦺 EPIs</div>
+            <div style="padding:4px 6px;margin-bottom:3px">📚 Treinamentos</div>
+            <div style="padding:4px 6px;margin-bottom:3px">⚖️ CIPA</div>
+          </div>
+          <div style="flex:1;padding:10px;background:#f8f9fa">
+            <div style="display:flex;gap:8px;margin-bottom:8px">
+              <div style="flex:1;background:#fff;border-radius:6px;padding:8px;border:1px solid #e0e0e0;font-size:11px"><div style="color:#c0392b;font-size:18px;font-weight:700">3</div>ASOs Vencidos</div>
+              <div style="flex:1;background:#fff;border-radius:6px;padding:8px;border:1px solid #e0e0e0;font-size:11px"><div style="color:#e67e22;font-size:18px;font-weight:700">12</div>Vencem em 30d</div>
+              <div style="flex:1;background:#fff;border-radius:6px;padding:8px;border:1px solid #e0e0e0;font-size:11px"><div style="color:#2980b9;font-size:18px;font-weight:700">1</div>Acidentes/mês</div>
+            </div>
+            <div style="background:#fff;border-radius:6px;height:50px;border:1px solid #e0e0e0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Abas Superiores por Área (atual, expandido)</h3>
+      <p>Mantém a navegação horizontal por abas, expandindo para ~8 módulos. Mais familiar para o time atual, menor curva de aprendizado. Mais simples visualmente mas fica congestionado com muitos módulos.</p>
+      <div class="mockup" style="margin-top:10px">
+        <div class="mockup-header">Prévia</div>
+        <div class="mockup-body" style="padding:10px;min-height:100px">
+          <div style="font-weight:600;margin-bottom:8px;font-size:12px">SST Metro-DF</div>
+          <div style="display:flex;gap:0;border-bottom:2px solid #ddd;font-size:11px;overflow-x:auto">
+            <div style="padding:6px 10px;border-bottom:2px solid #0a7d4b;margin-bottom:-2px;color:#0a7d4b;font-weight:600;white-space:nowrap">Dashboard</div>
+            <div style="padding:6px 10px;white-space:nowrap;color:#666">Saúde Ocup.</div>
+            <div style="padding:6px 10px;white-space:nowrap;color:#666">Segurança</div>
+            <div style="padding:6px 10px;white-space:nowrap;color:#666">EPIs</div>
+            <div style="padding:6px 10px;white-space:nowrap;color:#666">Treinamentos</div>
+            <div style="padding:6px 10px;white-space:nowrap;color:#666">CIPA</div>
+            <div style="padding:6px 10px;white-space:nowrap;color:#666">Laudos</div>
+            <div style="padding:6px 10px;white-space:nowrap;color:#666">Funcionários</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Menu Agrupado por Domínio (dois níveis)</h3>
+      <p>Sidebar com grupos colapsáveis: <em>Saúde</em> agrupa ASO/PCMSO/Absenteísmo; <em>Segurança</em> agrupa Acidentes/Inspeções/APR. Escala melhor para muitos módulos, hierarquia clara. Padrão de sistemas como GHE, SESI SST.</p>
+      <div class="mockup" style="margin-top:10px">
+        <div class="mockup-header">Prévia</div>
+        <div class="mockup-body" style="display:flex;gap:0;padding:0;min-height:120px">
+          <div style="width:150px;background:#1a2535;padding:10px;font-size:11px;color:#aaa;flex-shrink:0">
+            <div style="color:#4ade80;font-weight:600;margin-bottom:8px;font-size:12px">SST Metro-DF</div>
+            <div style="color:#64748b;font-size:10px;text-transform:uppercase;margin-bottom:4px">Saúde Ocupacional</div>
+            <div style="padding:3px 8px;margin-bottom:2px;color:#cbd5e1">↳ ASO / Exames</div>
+            <div style="padding:3px 8px;margin-bottom:2px;color:#cbd5e1">↳ Absenteísmo</div>
+            <div style="padding:3px 8px;margin-bottom:6px;color:#cbd5e1">↳ PCMSO</div>
+            <div style="color:#64748b;font-size:10px;text-transform:uppercase;margin-bottom:4px">Segurança</div>
+            <div style="padding:3px 8px;margin-bottom:2px;color:#cbd5e1">↳ Acidentes / CAT</div>
+            <div style="padding:3px 8px;margin-bottom:2px;color:#cbd5e1">↳ Inspeções</div>
+            <div style="padding:3px 8px;margin-bottom:6px;color:#cbd5e1">↳ APR</div>
+            <div style="color:#64748b;font-size:10px;text-transform:uppercase;margin-bottom:4px">Gestão</div>
+            <div style="padding:3px 8px;margin-bottom:2px;color:#cbd5e1">↳ EPIs</div>
+            <div style="padding:3px 8px;color:#cbd5e1">↳ Treinamentos</div>
+          </div>
+          <div style="flex:1;padding:10px;background:#f8f9fa;font-size:11px;color:#666">
+            Conteúdo do módulo selecionado
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
