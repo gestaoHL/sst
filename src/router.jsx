@@ -11,6 +11,7 @@ import TreinamentosPage from './pages/treinamentos/TreinamentosPage'
 import AbsenteismoPage from './pages/saude/Absenteismo/AbsenteismoPage'
 import PcmsoPage from './pages/saude/Pcmso/PcmsoPage'
 import InspecoesPage from './pages/seguranca/Inspecoes/InspecoesPage'
+import PermissoesPage from './pages/seguranca/Permissoes/PermissoesPage'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -29,7 +30,7 @@ export const router = createBrowserRouter([
       { path: 'saude/absenteismo',        element: <AbsenteismoPage /> },
       { path: 'seguranca/acidentes',     element: <AcidentesPage /> },
       { path: 'seguranca/inspecoes',     element: <InspecoesPage /> },
-      { path: 'seguranca/permissoes',    element: <ComingSoon modulo="Permissões de Trabalho" /> },
+      { path: 'seguranca/permissoes',    element: <PermissoesPage /> },
       { path: 'epi',                     element: <EpiPage /> },
       { path: 'treinamentos',            element: <TreinamentosPage /> },
       { path: 'cipa',                    element: <ComingSoon modulo="CIPA" /> },
