@@ -8,6 +8,7 @@ import ComingSoon from './pages/stubs/ComingSoon'
 import AcidentesPage from './pages/seguranca/Acidentes/AcidentesPage'
 import EpiPage from './pages/epi/EpiPage'
 import TreinamentosPage from './pages/treinamentos/TreinamentosPage'
+import AbsenteismoPage from './pages/saude/Absenteismo/AbsenteismoPage'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -23,7 +24,7 @@ export const router = createBrowserRouter([
       { path: 'dashboard',               element: <Dashboard /> },
       { path: 'saude/aso',               element: <AsoPage /> },
       { path: 'saude/pcmso',             element: <ComingSoon modulo="PCMSO" /> },
-      { path: 'saude/absenteismo',        element: <ComingSoon modulo="Absenteísmo" /> },
+      { path: 'saude/absenteismo',        element: <AbsenteismoPage /> },
       { path: 'seguranca/acidentes',     element: <AcidentesPage /> },
       { path: 'seguranca/inspecoes',     element: <ComingSoon modulo="Inspeções" /> },
       { path: 'seguranca/permissoes',    element: <ComingSoon modulo="Permissões de Trabalho" /> },
