@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
+import { exportCsv } from '../../../lib/exportCsv'
 import Topbar from '../../../components/layout/Topbar'
 import Button from '../../../components/ui/Button'
 import Badge from '../../../components/ui/Badge'
@@ -59,10 +60,10 @@ export default function AsoPage() {
         breadcrumb="Saúde Ocupacional"
         title={<><i className="fa-solid fa-file-medical text-metro-primary mr-2" />ASO · Exames Médicos</>}
         actions={
-          <>
-            <Button variant="outline" size="sm" icon="file-export">Exportar</Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" icon="file-csv" onClick={() => exportCsv(filtered, 'asos.csv')}>Exportar CSV</Button>
             <Button size="sm" icon="plus" onClick={() => setShowForm(true)}>Novo ASO</Button>
-          </>
+          </div>
         }
       />
 

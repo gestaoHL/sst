@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
+import { exportCsv } from '../../../lib/exportCsv'
 import Topbar from '../../../components/layout/Topbar'
 import Button from '../../../components/ui/Button'
 import { DataTable, Td } from '../../../components/ui/Table'
@@ -63,7 +64,10 @@ export default function AbsenteismoPage() {
         breadcrumb="Saúde Ocupacional"
         title={<><i className="fa-solid fa-calendar-xmark text-metro-primary mr-2" />Absenteísmo</>}
         actions={
-          <Button size="sm" icon="plus" onClick={() => setShowForm(true)}>Registrar Afastamento</Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" icon="file-csv" onClick={() => exportCsv(filtered, 'afastamentos.csv')}>Exportar CSV</Button>
+            <Button size="sm" icon="plus" onClick={() => setShowForm(true)}>Registrar Afastamento</Button>
+          </div>
         }
       />
 

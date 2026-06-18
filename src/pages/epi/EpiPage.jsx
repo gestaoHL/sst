@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { exportCsv } from '../../lib/exportCsv'
 import Topbar from '../../components/layout/Topbar'
 import Button from '../../components/ui/Button'
 import { DataTable, Td } from '../../components/ui/Table'
@@ -51,7 +52,10 @@ export default function EpiPage() {
         breadcrumb="Gestão"
         title={<><i className="fa-solid fa-helmet-safety text-metro-primary mr-2" />Gestão de EPIs</>}
         actions={
-          <Button size="sm" icon="plus" onClick={() => setShowForm(true)}>Novo EPI</Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" icon="file-csv" onClick={() => exportCsv(filtered, 'epis.csv')}>Exportar CSV</Button>
+            <Button size="sm" icon="plus" onClick={() => setShowForm(true)}>Novo EPI</Button>
+          </div>
         }
       />
 
