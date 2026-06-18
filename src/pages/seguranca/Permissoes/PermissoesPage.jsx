@@ -63,11 +63,14 @@ export default function PermissoesPage() {
 
   function imprimirPt(row) {
     setPrintTarget(row)
-    setTimeout(() => {
+  }
+
+  useEffect(() => {
+    if (printTarget) {
       window.print()
       setPrintTarget(null)
-    }, 100)
-  }
+    }
+  }, [printTarget])
 
   const filtered = rows.filter((r) => {
     const q = search.toLowerCase()

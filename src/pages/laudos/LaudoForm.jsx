@@ -33,7 +33,8 @@ export default function LaudoForm({ onSaved, onCancel }) {
       return
     }
     setSaving(true); setErro(null)
-    const { error } = await supabase.from('laudo').insert(form)
+    const payload = { ...form, validade: form.validade || null }
+    const { error } = await supabase.from('laudo').insert(payload)
     setSaving(false)
     if (error) setErro('Erro ao salvar: ' + error.message)
     else onSaved()

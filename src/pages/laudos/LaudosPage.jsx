@@ -29,7 +29,7 @@ const PER_PAGE = 20
 
 function docStatus(validade) {
   if (!validade) return { label: 'Sem validade', cls: 'bg-gray-100 text-gray-500' }
-  const diff = Math.floor((new Date(validade) - new Date()) / 86400000)
+  const diff = Math.floor((new Date(validade + 'T00:00:00') - new Date()) / 86400000)
   if (diff < 0)   return { label: 'Vencido',           cls: 'bg-red-50 text-red-600' }
   if (diff <= 90) return { label: `Vence em ${diff}d`, cls: 'bg-orange-50 text-orange-600' }
   return { label: 'Válido', cls: 'bg-green-50 text-green-600' }

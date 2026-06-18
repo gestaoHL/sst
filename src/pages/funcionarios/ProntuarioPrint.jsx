@@ -91,6 +91,22 @@ export default function ProntuarioPrint({ func, asos, epis, treinamentos, afasta
         ]}
       />
 
+      {/* Treinamentos */}
+      <PrintSection
+        title="Treinamentos"
+        rows={treinamentos}
+        headers={['Treinamento', 'NR', 'Data', 'Válido até']}
+        renderRow={(r) => {
+          const d = r.treinamento?.data_realizacao
+          const m = r.treinamento?.validade_meses
+          const fmt = (dt) => dt ? new Date(dt + 'T00:00:00').toLocaleDateString('pt-BR') : '—'
+          const valido = d && m
+            ? new Date(new Date(d).setMonth(new Date(d).getMonth() + m)).toLocaleDateString('pt-BR')
+            : '—'
+          return [r.treinamento?.nome || '—', r.treinamento?.nr_vinculada || '—', d ? fmt(d) : '—', valido]
+        }}
+      />
+
       {/* Afastamentos */}
       <PrintSection
         title="Afastamentos"
