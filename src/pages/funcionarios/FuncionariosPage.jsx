@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import Topbar from '../../components/layout/Topbar'
+import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import { DataTable, Td } from '../../components/ui/Table'
 import Pagination from '../../components/ui/Pagination'
 import FilterBar, { SearchInput, FilterChip } from '../../components/ui/FilterBar'
+import SidePanel from '../../components/ui/SidePanel'
+import FuncionarioForm from './FuncionarioForm'
+import FuncionarioImport from './FuncionarioImport'
 
 const SITUACAO_LABEL = {
   vencido:  'Vencido',
@@ -19,21 +23,25 @@ const SITUACAO_LABEL = {
 const PER_PAGE = 20
 
 export default function FuncionariosPage() {
-  const [rows, setRows]     = useState([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [filtro, setFiltro] = useState('todos')
-  const [page, setPage]     = useState(1)
+  const [rows, setRows]           = useState([])
+  const [loading, setLoading]     = useState(true)
+  const [search, setSearch]       = useState('')
+  const [filtro, setFiltro]       = useState('todos')
+  const [page, setPage]           = useState(1)
+  const [showForm, setShowForm]   = useState(false)
+  const [showImport, setShowImport] = useState(false)
   const navigate = useNavigate()
 
-  useEffect(() => {
+  function load() {
     setLoading(true)
     supabase
       .from('vw_situacao_funcionario')
       .select('*')
       .order('nome_completo')
       .then(({ data }) => { setRows(data ?? []); setLoading(false) })
-  }, [])
+  }
+
+  useEffect(() => { load() }, [])
 
   const filtered = rows.filter((r) => {
     const q = search.toLowerCase()
@@ -51,7 +59,18 @@ export default function FuncionariosPage() {
       <Topbar
         breadcrumb="Cadastros"
         title={<><i className="fa-solid fa-users text-metro-primary mr-2" />Funcionários</>}
+        actions={
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" icon="file-excel" onClick={() => setShowImport(true)}>
+              Importar Excel
+            </Button>
+            <Button size="sm" icon="user-plus" onClick={() => setShowForm(true)}>
+              Novo Funcionário
+            </Button>
+          </div>
+        }
       />
+
       <div className="p-6">
         <FilterBar>
           <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1) }} placeholder="Buscar por nome ou matrícula..." />
@@ -64,51 +83,67 @@ export default function FuncionariosPage() {
           </div>
         </FilterBar>
 
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-          <div className="px-5 py-3.5 border-b border-gray-100">
-            <span className="text-[13px] font-bold text-metro-navy">
-              Funcionários
-              <span className="text-metro-muted font-normal ml-2 text-xs">— {filtered.length} registros</span>
-            </span>
+        <div className="flex gap-4">
+          <div className="flex-1 bg-white rounded-xl border border-gray-100 overflow-hidden">
+            <div className="px-5 py-3.5 border-b border-gray-100">
+              <span className="text-[13px] font-bold text-metro-navy">
+                Funcionários
+                <span className="text-metro-muted font-normal ml-2 text-xs">— {filtered.length} registros</span>
+              </span>
+            </div>
+
+            {loading ? (
+              <p className="px-5 py-8 text-center text-metro-muted text-sm">Carregando...</p>
+            ) : (
+              <>
+                <DataTable
+                  headers={['Matrícula', 'Nome', 'Função', 'Setor', 'Último ASO', 'Situação', '']}
+                  empty="Nenhum funcionário cadastrado. Use 'Novo Funcionário' ou 'Importar Excel'."
+                >
+                  {paginated.map((r) => (
+                    <tr key={r.funcionario_id} className="hover:bg-slate-50/60 transition-colors">
+                      <Td className="text-[12px] text-metro-muted font-mono">{r.matricula}</Td>
+                      <Td>
+                        <p className="font-semibold text-metro-text text-[13px]">{r.nome_completo}</p>
+                      </Td>
+                      <Td className="text-[12px] text-metro-muted">{r.funcao || '—'}</Td>
+                      <Td className="text-[12px] text-metro-muted">{r.setor || '—'}</Td>
+                      <Td className="text-[12px] text-metro-muted">
+                        {r.ultimo_aso ? new Date(r.ultimo_aso + 'T00:00:00').toLocaleDateString('pt-BR') : '—'}
+                      </Td>
+                      <Td>
+                        <Badge status={r.situacao}>{SITUACAO_LABEL[r.situacao] ?? r.situacao}</Badge>
+                      </Td>
+                      <Td>
+                        <button
+                          onClick={() => navigate(`/funcionarios/${r.funcionario_id}`)}
+                          className="text-metro-muted hover:text-metro-primary transition-colors p-1 bg-transparent border-none cursor-pointer"
+                          title="Ver prontuário"
+                        >
+                          <i className="fa-solid fa-eye text-xs" />
+                        </button>
+                      </Td>
+                    </tr>
+                  ))}
+                </DataTable>
+                <Pagination page={page} total={filtered.length} perPage={PER_PAGE} onPage={setPage} />
+              </>
+            )}
           </div>
 
-          {loading ? (
-            <p className="px-5 py-8 text-center text-metro-muted text-sm">Carregando...</p>
-          ) : (
-            <>
-              <DataTable
-                headers={['Matrícula', 'Nome', 'Função', 'Setor', 'Último ASO', 'Situação', '']}
-                empty="Nenhum funcionário cadastrado."
-              >
-                {paginated.map((r) => (
-                  <tr key={r.funcionario_id} className="hover:bg-slate-50/60 transition-colors">
-                    <Td className="text-[12px] text-metro-muted font-mono">{r.matricula}</Td>
-                    <Td>
-                      <p className="font-semibold text-metro-text text-[13px]">{r.nome_completo}</p>
-                    </Td>
-                    <Td className="text-[12px] text-metro-muted">{r.funcao || '—'}</Td>
-                    <Td className="text-[12px] text-metro-muted">{r.setor || '—'}</Td>
-                    <Td className="text-[12px] text-metro-muted">
-                      {r.ultimo_aso ? new Date(r.ultimo_aso + 'T00:00:00').toLocaleDateString('pt-BR') : '—'}
-                    </Td>
-                    <Td>
-                      <Badge status={r.situacao}>{SITUACAO_LABEL[r.situacao] ?? r.situacao}</Badge>
-                    </Td>
-                    <Td>
-                      <button
-                        onClick={() => navigate(`/funcionarios/${r.funcionario_id}`)}
-                        className="text-metro-muted hover:text-metro-primary transition-colors p-1 bg-transparent border-none cursor-pointer"
-                        title="Ver prontuário"
-                      >
-                        <i className="fa-solid fa-eye text-xs" />
-                      </button>
-                    </Td>
-                  </tr>
-                ))}
-              </DataTable>
-              <Pagination page={page} total={filtered.length} perPage={PER_PAGE} onPage={setPage} />
-            </>
-          )}
+          <SidePanel open={showForm} title="Novo Funcionário" icon="user-plus" onClose={() => setShowForm(false)}>
+            <FuncionarioForm
+              onSaved={() => { setShowForm(false); load() }}
+              onCancel={() => setShowForm(false)}
+            />
+          </SidePanel>
+
+          <SidePanel open={showImport} title="Importar via Excel" icon="file-excel" onClose={() => setShowImport(false)}>
+            <FuncionarioImport
+              onImported={() => { setShowImport(false); load() }}
+              onCancel={() => setShowImport(false)}
+            />
+          </SidePanel>
         </div>
       </div>
     </div>
