@@ -7,6 +7,7 @@ import Pagination from '../../../components/ui/Pagination'
 import FilterBar, { SearchInput, FilterChip } from '../../../components/ui/FilterBar'
 import SidePanel from '../../../components/ui/SidePanel'
 import PermissaoForm from './PermissaoForm'
+import PermissaoPrint from './PermissaoPrint'
 
 const TIPO_LABEL = {
   entrada_via:      'Entrada em Via',
@@ -47,6 +48,7 @@ export default function PermissoesPage() {
   const [filtro, setFiltro]     = useState('todos')
   const [page, setPage]         = useState(1)
   const [showForm, setShowForm] = useState(false)
+  const [printTarget, setPrintTarget] = useState(null)
 
   function load() {
     setLoading(true)
@@ -58,6 +60,14 @@ export default function PermissoesPage() {
   }
 
   useEffect(() => { load() }, [])
+
+  function imprimirPt(row) {
+    setPrintTarget(row)
+    setTimeout(() => {
+      window.print()
+      setPrintTarget(null)
+    }, 100)
+  }
 
   const filtered = rows.filter((r) => {
     const q = search.toLowerCase()
@@ -131,9 +141,18 @@ export default function PermissoesPage() {
                         </span>
                       </Td>
                       <Td>
-                        <button className="text-metro-muted hover:text-metro-primary transition-colors p-1 bg-transparent border-none cursor-pointer">
-                          <i className="fa-solid fa-eye text-xs" />
-                        </button>
+                        <div className="flex gap-1">
+                          <button className="text-metro-muted hover:text-metro-primary transition-colors p-1 bg-transparent border-none cursor-pointer">
+                            <i className="fa-solid fa-eye text-xs" />
+                          </button>
+                          <button
+                            onClick={() => imprimirPt(r)}
+                            className="text-metro-muted hover:text-metro-primary transition-colors p-1 bg-transparent border-none cursor-pointer"
+                            title="Imprimir PT"
+                          >
+                            <i className="fa-solid fa-print text-xs" />
+                          </button>
+                        </div>
                       </Td>
                     </tr>
                   ))}
@@ -148,6 +167,7 @@ export default function PermissoesPage() {
           </SidePanel>
         </div>
       </div>
+      <PermissaoPrint data={printTarget} />
     </div>
   )
 }
