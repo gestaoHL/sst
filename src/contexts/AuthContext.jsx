@@ -8,27 +8,16 @@ export function AuthProvider({ children }) {
   const [perfil, setPerfil] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  async function loadPerfil(userId) {
-    const { data } = await supabase
-      .from('perfil')
-      .select('*')
-      .eq('id', userId)
-      .single()
-    setPerfil(data)
-    setLoading(false)
-  }
-
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
-      if (session) loadPerfil(session.user.id)
-      else setLoading(false)
+      setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      if (session) loadPerfil(session.user.id)
-      else { setPerfil(null); setLoading(false) }
+      setPerfil(null)
+      setLoading(false)
     })
 
     return () => subscription.unsubscribe()
