@@ -13,19 +13,21 @@ const TIPOS = [
 ]
 
 const RESULTADOS = [
-  { value: 'apto',              label: 'Apto' },
-  { value: 'apto_com_restricao',label: 'Apto com Restrição' },
-  { value: 'inapto',            label: 'Inapto' },
+  { value: 'apto',   label: 'Apto' },
+  { value: 'inapto', label: 'Inapto' },
 ]
 
 export default function AsoForm({ onSaved, onCancel }) {
   const [funcionarios, setFuncionarios] = useState([])
   const [form, setForm] = useState({
     funcionario_id: '',
-    tipo: 'periodico',
-    data_realizacao: new Date().toISOString().slice(0, 10),
-    resultado: 'apto',
-    restricoes: '',
+    tipo_exame: 'periodico',
+    data_aso: new Date().toISOString().slice(0, 10),
+    data_proximo_aso: '',
+    medico_responsavel: '',
+    crm: '',
+    apto: true,
+    observacoes: '',
   })
   const [saving, setSaving] = useState(false)
   const [erro, setErro] = useState(null)
@@ -42,8 +44,12 @@ export default function AsoForm({ onSaved, onCancel }) {
 
   async function salvar() {
     if (!form.funcionario_id) { setErro('Selecione o funcionário.'); return }
+    if (!form.data_aso) { setErro('Informe a data do ASO.'); return }
     setSaving(true); setErro(null)
-    const { error } = await supabase.from('aso').insert(form)
+    const { error } = await supabase.from('aso').insert({
+      ...form,
+      data_proximo_aso: form.data_proximo_aso || null,
+    })
     setSaving(false)
     if (error) setErro('Erro ao salvar: ' + error.message)
     else onSaved()
@@ -59,11 +65,18 @@ export default function AsoForm({ onSaved, onCancel }) {
       </Select>
 
       <div className="grid grid-cols-2 gap-3">
-        <Select label="Tipo" value={form.tipo} onChange={(e) => set('tipo', e.target.value)}>
+        <Select label="Tipo de Exame" value={form.tipo_exame} onChange={(e) => set('tipo_exame', e.target.value)}>
           {TIPOS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
         </Select>
-        <DateInput label="Data de Realização" value={form.data_realizacao} onChange={(e) => set('data_realizacao', e.target.value)} />
+        <DateInput label="Data do ASO" value={form.data_aso} onChange={(e) => set('data_aso', e.target.value)} />
       </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Input label="Médico Responsável" value={form.medico_responsavel} onChange={(e) => set('medico_responsavel', e.target.value)} placeholder="Nome do médico" />
+        <Input label="CRM" value={form.crm} onChange={(e) => set('crm', e.target.value)} placeholder="Ex: 12345/DF" />
+      </div>
+
+      <DateInput label="Data do Próximo ASO" value={form.data_proximo_aso} onChange={(e) => set('data_proximo_aso', e.target.value)} />
 
       <div className="mb-4">
         <label className="block text-[11px] font-semibold text-metro-muted uppercase tracking-wide mb-1.5">Resultado</label>
@@ -71,13 +84,12 @@ export default function AsoForm({ onSaved, onCancel }) {
           {RESULTADOS.map((r) => (
             <button
               key={r.value}
-              onClick={() => set('resultado', r.value)}
+              type="button"
+              onClick={() => set('apto', r.value === 'apto')}
               className={`flex-1 py-2 rounded-md border-2 text-xs font-semibold transition-colors font-sans cursor-pointer ${
-                form.resultado === r.value
+                (r.value === 'apto') === form.apto
                   ? r.value === 'apto'
                     ? 'border-green-500 bg-green-50 text-green-700'
-                    : r.value === 'apto_com_restricao'
-                    ? 'border-orange-400 bg-orange-50 text-orange-700'
                     : 'border-red-500 bg-red-50 text-red-700'
                   : 'border-gray-200 text-metro-muted hover:border-gray-300'
               }`}
@@ -88,7 +100,7 @@ export default function AsoForm({ onSaved, onCancel }) {
         </div>
       </div>
 
-      <Textarea label="Restrições / Observações" value={form.restricoes} onChange={(e) => set('restricoes', e.target.value)} placeholder="Descreva restrições ou observações..." rows={3} />
+      <Textarea label="Observações" value={form.observacoes} onChange={(e) => set('observacoes', e.target.value)} placeholder="Restrições, observações do médico..." rows={3} />
 
       {erro && <p className="text-red-600 text-xs bg-red-50 px-3 py-2 rounded-md mb-3">{erro}</p>}
 
