@@ -5,19 +5,30 @@ export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null)
-  const [perfil, setPerfil] = useState(null)
+  const [perfil, setPerfil]   = useState(null)
   const [loading, setLoading] = useState(true)
+
+  async function loadPerfil(userId) {
+    const { data } = await supabase
+      .from('perfil')
+      .select('id, nome, email, is_admin')
+      .eq('id', userId)
+      .single()
+    setPerfil(data ?? null)
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setLoading(false)
+      if (session) loadPerfil(session.user.id)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      setPerfil(null)
       setLoading(false)
+      if (session) loadPerfil(session.user.id)
+      else setPerfil(null)
     })
 
     return () => subscription.unsubscribe()

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
 export default function Login() {
@@ -77,7 +77,13 @@ export default function Login() {
           </form>
         </div>
 
-        <p className="text-center text-white/30 text-xs mt-6">
+        <p className="text-center text-white/40 text-xs mt-5">
+          Não tem acesso?{' '}
+          <Link to="/solicitar-acesso" className="text-metro-accent hover:underline font-semibold">
+            Solicite aqui
+          </Link>
+        </p>
+        <p className="text-center text-white/20 text-xs mt-2">
           SST Metro-DF · Acesso controlado pelo SESMT
         </p>
       </div>

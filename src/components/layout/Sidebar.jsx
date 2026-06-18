@@ -1,22 +1,23 @@
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 
 const NAV = [
   {
-    items: [{ icon: 'gauge',       label: 'Dashboard',   to: '/dashboard' }],
+    items: [{ icon: 'gauge', label: 'Dashboard', to: '/dashboard' }],
   },
   {
     section: 'Saúde Ocupacional',
     items: [
-      { icon: 'file-medical',    label: 'ASO / Exames',   to: '/saude/aso' },
-      { icon: 'heart-pulse',     label: 'PCMSO',          to: '/saude/pcmso' },
-      { icon: 'calendar-xmark',  label: 'Absenteísmo',    to: '/saude/absenteismo' },
+      { icon: 'file-medical',   label: 'ASO / Exames',  to: '/saude/aso' },
+      { icon: 'heart-pulse',    label: 'PCMSO',          to: '/saude/pcmso' },
+      { icon: 'calendar-xmark', label: 'Absenteísmo',    to: '/saude/absenteismo' },
     ],
   },
   {
     section: 'Segurança',
     items: [
-      { icon: 'triangle-exclamation', label: 'Acidentes / CAT',       to: '/seguranca/acidentes' },
-      { icon: 'magnifying-glass',      label: 'Inspeções',             to: '/seguranca/inspecoes' },
+      { icon: 'triangle-exclamation', label: 'Acidentes / CAT',        to: '/seguranca/acidentes' },
+      { icon: 'magnifying-glass',      label: 'Inspeções',              to: '/seguranca/inspecoes' },
       { icon: 'clipboard-check',       label: 'Permissões de Trabalho', to: '/seguranca/permissoes' },
     ],
   },
@@ -37,7 +38,17 @@ const NAV = [
   },
 ]
 
+const ADMIN_NAV = {
+  section: 'Administração',
+  items: [
+    { icon: 'user-shield', label: 'Gerenciar Acesso', to: '/admin/acesso' },
+  ],
+}
+
 export default function Sidebar() {
+  const { perfil } = useAuth()
+  const nav = perfil?.is_admin ? [...NAV, ADMIN_NAV] : NAV
+
   return (
     <aside className="w-[240px] bg-metro-navy flex flex-col h-screen overflow-y-auto flex-shrink-0 print:hidden">
       <div className="px-4 py-5 border-b border-white/10">
@@ -53,7 +64,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 py-2">
-        {NAV.map((group, gi) => (
+        {nav.map((group, gi) => (
           <div key={gi} className="mb-1">
             {group.section && (
               <p className="px-4 py-2 text-[10px] font-semibold text-white/30 uppercase tracking-widest">
@@ -79,6 +90,15 @@ export default function Sidebar() {
           </div>
         ))}
       </nav>
+
+      {perfil && (
+        <div className="px-4 py-3 border-t border-white/10">
+          <p className="text-[11px] text-white/50 truncate">{perfil.nome || perfil.email || 'Usuário'}</p>
+          {perfil.is_admin && (
+            <p className="text-[10px] text-metro-accent font-semibold mt-0.5">Administrador</p>
+          )}
+        </div>
+      )}
     </aside>
   )
 }

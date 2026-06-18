@@ -1,4 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+import SolicitarAcesso from './pages/auth/SolicitarAcesso'
+import AcessoPage from './pages/admin/AcessoPage'
 import AppShell from './components/layout/AppShell'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import Login from './pages/auth/Login'
@@ -18,7 +20,8 @@ import CipaPage from './pages/cipa/CipaPage'
 import LaudosPage from './pages/laudos/LaudosPage'
 
 export const router = createBrowserRouter([
-  { path: '/login', element: <Login /> },
+  { path: '/login',             element: <Login /> },
+  { path: '/solicitar-acesso', element: <SolicitarAcesso /> },
   {
     path: '/',
     element: (
@@ -41,6 +44,7 @@ export const router = createBrowserRouter([
       { path: 'laudos',               element: <LaudosPage /> },
       { path: 'funcionarios',         element: <FuncionariosPage /> },
       { path: 'funcionarios/:id',     element: <FuncionarioProntuario /> },
+      { path: 'admin/acesso',         element: <AcessoPage /> },
     ],
   },
 ], { basename: import.meta.env.BASE_URL })
