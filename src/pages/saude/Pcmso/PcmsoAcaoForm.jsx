@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../../lib/supabase'
-import { Input, Select, Textarea } from '../../../components/ui/FormControl'
+import { Input, Select, Textarea, DateInput } from '../../../components/ui/FormControl'
 import Button from '../../../components/ui/Button'
 
 const STATUS_ACAO = [
@@ -27,7 +27,10 @@ export default function PcmsoAcaoForm({ programaId, onSaved, onCancel }) {
   async function salvar() {
     if (!form.descricao) { setErro('Informe a descrição da ação.'); return }
     setSaving(true); setErro(null)
-    const { error } = await supabase.from('pcmso_acao').insert(form)
+    const { error } = await supabase.from('pcmso_acao').insert({
+      ...form,
+      data_prevista: form.data_prevista || null,
+    })
     setSaving(false)
     if (error) setErro('Erro ao salvar: ' + error.message)
     else onSaved()
@@ -39,7 +42,7 @@ export default function PcmsoAcaoForm({ programaId, onSaved, onCancel }) {
 
       <div className="grid grid-cols-2 gap-3">
         <Input label="GHE (Grupo Homogêneo)" value={form.ghe} onChange={(e) => set('ghe', e.target.value)} placeholder="Ex: GHE-01 Operação" />
-        <Input label="Data Prevista" type="date" value={form.data_prevista} onChange={(e) => set('data_prevista', e.target.value)} />
+        <DateInput label="Data Prevista" value={form.data_prevista} onChange={(e) => set('data_prevista', e.target.value)} />
       </div>
 
       <div className="grid grid-cols-2 gap-3">

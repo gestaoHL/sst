@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { Input, Select } from '../../components/ui/FormControl'
+import { Input, Select, DateInput } from '../../components/ui/FormControl'
 import Button from '../../components/ui/Button'
 
 const TIPOS_RISCO = [
@@ -28,7 +28,10 @@ export default function EpiForm({ onSaved, onCancel }) {
   async function salvar() {
     if (!form.nome || !form.ca) { setErro('Nome e CA são obrigatórios.'); return }
     setSaving(true); setErro(null)
-    const { error } = await supabase.from('epi_item').insert(form)
+    const { error } = await supabase.from('epi_item').insert({
+      ...form,
+      validade_ca: form.validade_ca || null,
+    })
     setSaving(false)
     if (error) setErro('Erro ao salvar: ' + error.message)
     else onSaved()
@@ -40,7 +43,7 @@ export default function EpiForm({ onSaved, onCancel }) {
 
       <div className="grid grid-cols-2 gap-3">
         <Input label="Nº CA (Certificado de Aprovação)" value={form.ca} onChange={(e) => set('ca', e.target.value)} placeholder="Ex: 12345" />
-        <Input label="Validade do CA" type="date" value={form.validade_ca} onChange={(e) => set('validade_ca', e.target.value)} />
+        <DateInput label="Validade do CA" value={form.validade_ca} onChange={(e) => set('validade_ca', e.target.value)} />
       </div>
 
       <Input label="Fabricante" value={form.fabricante} onChange={(e) => set('fabricante', e.target.value)} placeholder="Ex: 3M do Brasil" />

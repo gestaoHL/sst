@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
-import { Input, Select, Textarea } from '../../../components/ui/FormControl'
+import { Input, Select, Textarea, DateInput } from '../../../components/ui/FormControl'
 import Button from '../../../components/ui/Button'
 
 const TIPOS = [
@@ -62,7 +62,7 @@ export default function AsoForm({ onSaved, onCancel }) {
         <Select label="Tipo" value={form.tipo} onChange={(e) => set('tipo', e.target.value)}>
           {TIPOS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
         </Select>
-        <Input label="Data de Realização" type="date" value={form.data_realizacao} onChange={(e) => set('data_realizacao', e.target.value)} />
+        <DateInput label="Data de Realização" value={form.data_realizacao} onChange={(e) => set('data_realizacao', e.target.value)} />
       </div>
 
       <div className="mb-4">

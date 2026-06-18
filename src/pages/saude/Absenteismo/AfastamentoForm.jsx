@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
-import { Input, Select, Textarea } from '../../../components/ui/FormControl'
+import { Input, Select, Textarea, DateInput } from '../../../components/ui/FormControl'
 import Button from '../../../components/ui/Button'
 
 const TIPOS = [
@@ -46,6 +46,7 @@ export default function AfastamentoForm({ onSaved, onCancel }) {
     setSaving(true); setErro(null)
     const { error } = await supabase.from('afastamento').insert({
       ...form,
+      data_fim: form.data_fim || null,
       dias_afastados: diasAfastados,
     })
     setSaving(false)
@@ -72,8 +73,8 @@ export default function AfastamentoForm({ onSaved, onCancel }) {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Input label="Data de Início" type="date" value={form.data_inicio} onChange={(e) => set('data_inicio', e.target.value)} />
-        <Input label="Data de Retorno" type="date" value={form.data_fim} onChange={(e) => set('data_fim', e.target.value)} />
+        <DateInput label="Data de Início" value={form.data_inicio} onChange={(e) => set('data_inicio', e.target.value)} />
+        <DateInput label="Data de Retorno" value={form.data_fim} onChange={(e) => set('data_fim', e.target.value)} />
       </div>
 
       {diasAfastados !== null && (

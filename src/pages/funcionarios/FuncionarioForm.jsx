@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { Input, Select } from '../../components/ui/FormControl'
+import { Input, Select, DateInput } from '../../components/ui/FormControl'
 import Button from '../../components/ui/Button'
 
 const SETORES = [
@@ -50,9 +50,8 @@ export default function FuncionarioForm({ onSaved, onCancel }) {
           onChange={(e) => set('matricula', e.target.value)}
           placeholder="Ex: 001234"
         />
-        <Input
+        <DateInput
           label="Data de Admissão"
-          type="date"
           value={form.data_admissao}
           onChange={(e) => set('data_admissao', e.target.value)}
         />

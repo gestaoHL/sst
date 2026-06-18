@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { Input, Select, Textarea } from '../../components/ui/FormControl'
+import { Input, Select, Textarea, DateInput } from '../../components/ui/FormControl'
 import Button from '../../components/ui/Button'
 
 const TIPOS = [
@@ -54,8 +54,8 @@ export default function LaudoForm({ onSaved, onCancel }) {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Input label="Data de Emissão" type="date" value={form.data_emissao} onChange={(e) => set('data_emissao', e.target.value)} />
-        <Input label="Validade" type="date" value={form.validade} onChange={(e) => set('validade', e.target.value)} />
+        <DateInput label="Data de Emissão" value={form.data_emissao} onChange={(e) => set('data_emissao', e.target.value)} />
+        <DateInput label="Validade" value={form.validade} onChange={(e) => set('validade', e.target.value)} />
       </div>
 
       <Input label="URL / Link do Documento" value={form.url_documento} onChange={(e) => set('url_documento', e.target.value)} placeholder="https://..." />

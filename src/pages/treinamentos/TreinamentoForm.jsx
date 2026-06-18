@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { Input, Select, Textarea } from '../../components/ui/FormControl'
+import { Input, Select, Textarea, DateInput } from '../../components/ui/FormControl'
 import Button from '../../components/ui/Button'
 
 const NRS = [
@@ -53,7 +53,7 @@ export default function TreinamentoForm({ onSaved, onCancel }) {
 
       <div className="grid grid-cols-2 gap-3">
         <Input label="Instrutor" value={form.instrutor} onChange={(e) => set('instrutor', e.target.value)} placeholder="Nome do instrutor" />
-        <Input label="Data de Realização" type="date" value={form.data_realizacao} onChange={(e) => set('data_realizacao', e.target.value)} />
+        <DateInput label="Data de Realização" value={form.data_realizacao} onChange={(e) => set('data_realizacao', e.target.value)} />
       </div>
 
       <Textarea label="Observações" value={form.observacoes} onChange={(e) => set('observacoes', e.target.value)} placeholder="Conteúdo, local, observações..." rows={3} />

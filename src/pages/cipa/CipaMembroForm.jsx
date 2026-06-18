@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { Input, Select } from '../../components/ui/FormControl'
+import { Select, DateInput } from '../../components/ui/FormControl'
 import Button from '../../components/ui/Button'
 
 const CARGOS = [
@@ -68,8 +68,8 @@ export default function CipaMembroForm({ onSaved, onCancel }) {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <Input label="Início do Mandato" type="date" value={form.data_inicio} onChange={(e) => set('data_inicio', e.target.value)} />
-        <Input label="Fim do Mandato" type="date" value={form.data_fim} onChange={(e) => set('data_fim', e.target.value)} />
+        <DateInput label="Início do Mandato" value={form.data_inicio} onChange={(e) => set('data_inicio', e.target.value)} />
+        <DateInput label="Fim do Mandato" value={form.data_fim} onChange={(e) => set('data_fim', e.target.value)} />
       </div>
 
       {erro && <p className="text-red-600 text-xs bg-red-50 px-3 py-2 rounded-md mb-3">{erro}</p>}

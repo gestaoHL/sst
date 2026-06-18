@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { supabase } from '../../../lib/supabase'
-import { Input, Select, Textarea } from '../../../components/ui/FormControl'
+import { Input, Select, Textarea, DateInput } from '../../../components/ui/FormControl'
 import Button from '../../../components/ui/Button'
 
 const TIPOS = [
-  { value: 'rotineira',     label: 'Rotineira' },
-  { value: 'especial',      label: 'Especial' },
-  { value: 'pos_acidente',  label: 'Pós-Acidente' },
+  { value: 'rotineira',    label: 'Rotineira' },
+  { value: 'especial',     label: 'Especial' },
+  { value: 'pos_acidente', label: 'Pós-Acidente' },
 ]
 
 const AREAS = [
@@ -48,7 +48,7 @@ export default function InspecaoForm({ onSaved, onCancel }) {
         <Select label="Tipo de Inspeção" value={form.tipo} onChange={(e) => set('tipo', e.target.value)}>
           {TIPOS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
         </Select>
-        <Input label="Data" type="date" value={form.data_inspecao} onChange={(e) => set('data_inspecao', e.target.value)} />
+        <DateInput label="Data" value={form.data_inspecao} onChange={(e) => set('data_inspecao', e.target.value)} />
       </div>
 
       <Select label="Área Inspecionada" value={form.area} onChange={(e) => set('area', e.target.value)}>
