@@ -12,6 +12,8 @@ import AbsenteismoPage from './pages/saude/Absenteismo/AbsenteismoPage'
 import PcmsoPage from './pages/saude/Pcmso/PcmsoPage'
 import InspecoesPage from './pages/seguranca/Inspecoes/InspecoesPage'
 import PermissoesPage from './pages/seguranca/Permissoes/PermissoesPage'
+import FuncionariosPage from './pages/funcionarios/FuncionariosPage'
+import FuncionarioProntuario from './pages/funcionarios/FuncionarioProntuario'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -35,7 +37,8 @@ export const router = createBrowserRouter([
       { path: 'treinamentos',            element: <TreinamentosPage /> },
       { path: 'cipa',                    element: <ComingSoon modulo="CIPA" /> },
       { path: 'laudos',                  element: <ComingSoon modulo="Laudos / PGR" /> },
-      { path: 'funcionarios',            element: <ComingSoon modulo="Funcionários" /> },
+      { path: 'funcionarios',            element: <FuncionariosPage /> },
+      { path: 'funcionarios/:id',        element: <FuncionarioProntuario /> },
     ],
   },
 ])
