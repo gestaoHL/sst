@@ -15,6 +15,7 @@ import PermissoesPage from './pages/seguranca/Permissoes/PermissoesPage'
 import FuncionariosPage from './pages/funcionarios/FuncionariosPage'
 import FuncionarioProntuario from './pages/funcionarios/FuncionarioProntuario'
 import CipaPage from './pages/cipa/CipaPage'
+import LaudosPage from './pages/laudos/LaudosPage'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
       { path: 'epi',                     element: <EpiPage /> },
       { path: 'treinamentos',            element: <TreinamentosPage /> },
       { path: 'cipa',                    element: <CipaPage /> },
-      { path: 'laudos',                  element: <ComingSoon modulo="Laudos / PGR" /> },
+      { path: 'laudos',                  element: <LaudosPage /> },
       { path: 'funcionarios',            element: <FuncionariosPage /> },
       { path: 'funcionarios/:id',        element: <FuncionarioProntuario /> },
     ],
