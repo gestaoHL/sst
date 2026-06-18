@@ -39,7 +39,7 @@ const NAV = [
 
 export default function Sidebar() {
   return (
-    <aside className="w-[240px] bg-metro-navy flex flex-col h-screen overflow-y-auto flex-shrink-0">
+    <aside className="w-[240px] bg-metro-navy flex flex-col h-screen overflow-y-auto flex-shrink-0 print:hidden">
       <div className="px-4 py-5 border-b border-white/10">
         <div className="flex items-center gap-2.5">
           <span className="bg-metro-accent text-metro-navy font-bold text-[11px] px-2 py-1 rounded tracking-wide">
