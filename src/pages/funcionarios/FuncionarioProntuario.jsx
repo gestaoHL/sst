@@ -33,6 +33,7 @@ export default function FuncionarioProntuario() {
   useEffect(() => {
     async function load() {
       setLoading(true)
+      setSemTabTP(false)
 
       const { data: funcData } = await supabase
         .from('funcionario')
