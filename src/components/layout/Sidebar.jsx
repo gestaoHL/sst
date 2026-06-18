@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { supabase } from '../../lib/supabase'
 
 const NAV = [
   {
@@ -91,14 +92,21 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {perfil && (
-        <div className="px-4 py-3 border-t border-white/10">
-          <p className="text-[11px] text-white/50 truncate">{perfil.nome || perfil.email || 'Usuário'}</p>
-          {perfil.is_admin && (
-            <p className="text-[10px] text-metro-accent font-semibold mt-0.5">Administrador</p>
-          )}
-        </div>
-      )}
+      <div className="px-4 py-3 border-t border-white/10">
+        <p className="text-[11px] text-white/50 truncate">
+          {perfil?.nome || perfil?.email || 'Usuário'}
+        </p>
+        {perfil?.is_admin && (
+          <p className="text-[10px] text-metro-accent font-semibold mt-0.5">Administrador</p>
+        )}
+        <button
+          onClick={() => supabase.auth.signOut()}
+          className="mt-2 flex items-center gap-2 text-[12px] text-white/40 hover:text-white transition-colors bg-transparent border-none cursor-pointer font-sans w-full"
+        >
+          <i className="fa-solid fa-right-from-bracket text-[11px]" />
+          Sair
+        </button>
+      </div>
     </aside>
   )
 }
